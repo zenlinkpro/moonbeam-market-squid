@@ -1,0 +1,47 @@
+type Token @entity {
+  id: ID!
+  symbol: String!
+  name: String!
+  decimals: Int!
+  priceUSD: Float!
+}
+
+type SY @entity {
+  id: ID!
+  symbol: String!
+  name: String!
+  decimals: Int!
+  priceUSD: Float!
+
+  yieldToken: Token!
+}
+
+type PT @entity {
+  id: ID!
+  symbol: String!
+  name: String!
+  decimals: Int!
+  priceUSD: Float!
+}
+
+type YT @entity {
+  id: ID!
+  symbol: String!
+  name: String!
+  decimals: Int!
+  priceUSD: Float!
+}
+
+type Market @entity {
+  id: ID!
+  symbol: String!
+  name: String!
+  decimals: Int!
+  priceUSD: Float!
+
+  sy: SY! @index
+  pt: PT! @index
+  yt: YT! @index
+}
+
+
