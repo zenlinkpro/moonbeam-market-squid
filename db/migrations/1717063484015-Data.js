@@ -1,0 +1,53 @@
+module.exports = class Data1717063484015 {
+    name = 'Data1717063484015'
+
+    async up(db) {
+        await db.query(`CREATE TABLE "token" ("id" character varying NOT NULL, "symbol" text NOT NULL, "name" text NOT NULL, "decimals" integer NOT NULL, "price_usd" numeric NOT NULL, CONSTRAINT "PK_82fae97f905930df5d62a702fc9" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "sy" ("id" character varying NOT NULL, "symbol" text NOT NULL, "name" text NOT NULL, "decimals" integer NOT NULL, "price_usd" numeric NOT NULL, "yield_token_id" character varying, CONSTRAINT "PK_a3190ac120fb60fb6c5d732e914" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_cdd9266c5c25fc8b305ee59db0" ON "sy" ("yield_token_id") `)
+        await db.query(`CREATE TABLE "pt" ("id" character varying NOT NULL, "symbol" text NOT NULL, "name" text NOT NULL, "decimals" integer NOT NULL, "price_usd" numeric NOT NULL, CONSTRAINT "PK_b7e8610b3b107ea6a5eb35afe6e" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "yt" ("id" character varying NOT NULL, "symbol" text NOT NULL, "name" text NOT NULL, "decimals" integer NOT NULL, "price_usd" numeric NOT NULL, CONSTRAINT "PK_5d637ffe8a186ef26dc36f1c4d7" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "market_factory" ("id" character varying NOT NULL, "market_count" integer NOT NULL, "total_volume_usd" numeric NOT NULL, "total_liquidity_usd" numeric NOT NULL, CONSTRAINT "PK_094ae4a7792ef1eb11f661d6c23" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "market_hour_data" ("id" character varying NOT NULL, "hour_start_unix" numeric NOT NULL, "total_sy" numeric NOT NULL, "total_pt" numeric NOT NULL, "total_lp" numeric NOT NULL, "reserve_usd" numeric NOT NULL, "hourly_volume_usd" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_fe8e07643d89f76771f75022e30" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_25ac09e46ee99f2f7d985dde6e" ON "market_hour_data" ("hour_start_unix") `)
+        await db.query(`CREATE INDEX "IDX_9659555c3d9ef72633bcd73980" ON "market_hour_data" ("market_id") `)
+        await db.query(`CREATE TABLE "market_day_data" ("id" character varying NOT NULL, "date" TIMESTAMP WITH TIME ZONE NOT NULL, "total_sy" numeric NOT NULL, "total_pt" numeric NOT NULL, "total_lp" numeric NOT NULL, "reserve_usd" numeric NOT NULL, "daily_volume_usd" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_73be732a5d3ca8c02fceccb893a" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_f76883fa033bb2366e3866b36a" ON "market_day_data" ("date") `)
+        await db.query(`CREATE INDEX "IDX_1b2805b734605b589bc534c81b" ON "market_day_data" ("market_id") `)
+        await db.query(`CREATE TABLE "market" ("id" character varying NOT NULL, "symbol" text NOT NULL, "name" text NOT NULL, "decimals" integer NOT NULL, "price_usd" numeric NOT NULL, "total_sy" numeric NOT NULL, "total_pt" numeric NOT NULL, "total_lp" numeric NOT NULL, "reserve_usd" numeric NOT NULL, "volume_usd" numeric NOT NULL, "sy_id" character varying, "pt_id" character varying, "yt_id" character varying, CONSTRAINT "PK_1e9a2963edfd331d92018e3abac" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_0567f7ba5d352fadf3aaf433c5" ON "market" ("sy_id") `)
+        await db.query(`CREATE INDEX "IDX_abbd2573bae0c9ccab76e67bec" ON "market" ("pt_id") `)
+        await db.query(`CREATE INDEX "IDX_b01529185576217241ce6a5fbe" ON "market" ("yt_id") `)
+        await db.query(`ALTER TABLE "sy" ADD CONSTRAINT "FK_cdd9266c5c25fc8b305ee59db0c" FOREIGN KEY ("yield_token_id") REFERENCES "token"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "market_hour_data" ADD CONSTRAINT "FK_9659555c3d9ef72633bcd73980c" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "market_day_data" ADD CONSTRAINT "FK_1b2805b734605b589bc534c81bd" FOREIGN KEY ("market_id") REFERENCES "market"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "market" ADD CONSTRAINT "FK_0567f7ba5d352fadf3aaf433c5a" FOREIGN KEY ("sy_id") REFERENCES "sy"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "market" ADD CONSTRAINT "FK_abbd2573bae0c9ccab76e67beca" FOREIGN KEY ("pt_id") REFERENCES "pt"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "market" ADD CONSTRAINT "FK_b01529185576217241ce6a5fbe3" FOREIGN KEY ("yt_id") REFERENCES "yt"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+    }
+
+    async down(db) {
+        await db.query(`DROP TABLE "token"`)
+        await db.query(`DROP TABLE "sy"`)
+        await db.query(`DROP INDEX "public"."IDX_cdd9266c5c25fc8b305ee59db0"`)
+        await db.query(`DROP TABLE "pt"`)
+        await db.query(`DROP TABLE "yt"`)
+        await db.query(`DROP TABLE "market_factory"`)
+        await db.query(`DROP TABLE "market_hour_data"`)
+        await db.query(`DROP INDEX "public"."IDX_25ac09e46ee99f2f7d985dde6e"`)
+        await db.query(`DROP INDEX "public"."IDX_9659555c3d9ef72633bcd73980"`)
+        await db.query(`DROP TABLE "market_day_data"`)
+        await db.query(`DROP INDEX "public"."IDX_f76883fa033bb2366e3866b36a"`)
+        await db.query(`DROP INDEX "public"."IDX_1b2805b734605b589bc534c81b"`)
+        await db.query(`DROP TABLE "market"`)
+        await db.query(`DROP INDEX "public"."IDX_0567f7ba5d352fadf3aaf433c5"`)
+        await db.query(`DROP INDEX "public"."IDX_abbd2573bae0c9ccab76e67bec"`)
+        await db.query(`DROP INDEX "public"."IDX_b01529185576217241ce6a5fbe"`)
+        await db.query(`ALTER TABLE "sy" DROP CONSTRAINT "FK_cdd9266c5c25fc8b305ee59db0c"`)
+        await db.query(`ALTER TABLE "market_hour_data" DROP CONSTRAINT "FK_9659555c3d9ef72633bcd73980c"`)
+        await db.query(`ALTER TABLE "market_day_data" DROP CONSTRAINT "FK_1b2805b734605b589bc534c81bd"`)
+        await db.query(`ALTER TABLE "market" DROP CONSTRAINT "FK_0567f7ba5d352fadf3aaf433c5a"`)
+        await db.query(`ALTER TABLE "market" DROP CONSTRAINT "FK_abbd2573bae0c9ccab76e67beca"`)
+        await db.query(`ALTER TABLE "market" DROP CONSTRAINT "FK_b01529185576217241ce6a5fbe3"`)
+    }
+}

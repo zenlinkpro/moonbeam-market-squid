@@ -8,7 +8,7 @@ build:
 
 serve:
 	@npx squid-graphql-server
-
+	
 
 migrate:
 	@npx squid-typeorm-migration apply

@@ -32,6 +32,13 @@ type YT @entity {
   priceUSD: Float!
 }
 
+type MarketFactory @entity {
+  id: ID!
+  marketCount: Int!
+  totalVolumeUSD: Float!
+  totalLiquidityUSD: Float!
+}
+
 type Market @entity {
   id: ID!
   symbol: String!
@@ -42,6 +49,40 @@ type Market @entity {
   sy: SY! @index
   pt: PT! @index
   yt: YT! @index
+
+  totalSy: BigDecimal!
+  totalPt: BigDecimal!
+  totalLp: BigDecimal!
+
+  reserveUSD: Float!
+  volumeUSD: Float!
+
+  marketHourData: [MarketHourData!]! @derivedFrom(field: "market")
+  marketDayData: [MarketDayData!]! @derivedFrom(field: "market")
 }
 
+type MarketHourData @entity {
+  id: ID!
+  hourStartUnix: BigInt! @index
+  market: Market!
 
+  totalSy: BigDecimal!
+  totalPt: BigDecimal!
+  totalLp: BigDecimal!
+
+  reserveUSD: Float!
+  hourlyVolumeUSD: Float!
+}
+
+type MarketDayData @entity {
+  id: ID!
+  date: DateTime! @index
+  market: Market!
+
+  totalSy: BigDecimal!
+  totalPt: BigDecimal!
+  totalLp: BigDecimal!
+
+  reserveUSD: Float!
+  dailyVolumeUSD: Float!
+}
