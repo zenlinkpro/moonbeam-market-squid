@@ -1,5 +1,5 @@
 import * as p from '@subsquid/evm-codec'
-import { event, fun, indexed, ContractBase } from '@subsquid/evm-abi'
+import { event, fun, viewFun, indexed, ContractBase } from '@subsquid/evm-abi'
 import type { EventParams as EParams, FunctionArguments, FunctionReturn } from '@subsquid/evm-abi'
 
 export const events = {
@@ -11,8 +11,8 @@ export const events = {
 
 export const functions = {
     createNewMarket: fun("0xf661cf6b", {"PT": p.address, "scalarRoot": p.int256, "initialAnchor": p.int256, "lnFeeRateRoot": p.uint80}, p.address),
-    getMarketConfig: fun("0x5c098c11", {"market": p.address, "router": p.address}, {"treasury": p.address, "overriddenFee": p.uint80, "reserveFeePercent": p.uint8}),
-    isValidMarket: fun("0x58e6309f", {"market": p.address}, p.bool),
+    getMarketConfig: viewFun("0x5c098c11", {"market": p.address, "router": p.address}, {"treasury": p.address, "overriddenFee": p.uint80, "reserveFeePercent": p.uint8}),
+    isValidMarket: viewFun("0x58e6309f", {"market": p.address}, p.bool),
 }
 
 export class Contract extends ContractBase {

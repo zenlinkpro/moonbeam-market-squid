@@ -9,22 +9,31 @@ export async function getOrCreateSy(ctx: Context, log: Log, address: string): Pr
   if (!sy) {
     const syc = new SYC.Contract({ ...ctx, block: log.block }, address)
 
-    const [name, symbol, decimals, yieldTokenAddress] = await Promise.all([
+    const [name, symbol, decimals, yieldTokenAddress, assetInfo, exchangeRate] = await Promise.all([
       syc.name(),
       syc.symbol(),
       syc.decimals(),
-      syc.yieldToken()
+      syc.yieldToken(),
+      syc.assetInfo(),
+      syc.exchangeRate()
     ])
 
-    const yieldToken = await getOrCreateToken(ctx, log, yieldTokenAddress)
+    const [yieldToken, baseAsset] = await Promise.all([
+      getOrCreateToken(ctx, log, yieldTokenAddress),
+      getOrCreateToken(ctx, log, assetInfo.assetAddress)
+    ])
+
+    yieldToken.priceUSD = baseAsset.priceUSD * parseInt(exchangeRate.toString()) / 1e18
+    await ctx.store.save(yieldToken)
 
     sy = new SY({
       id: address,
       name,
       symbol,
       decimals,
-      priceUSD: 0,
-      yieldToken
+      priceUSD: yieldToken.priceUSD,
+      yieldToken,
+      baseAsset
     })
 
     await ctx.store.save(sy)

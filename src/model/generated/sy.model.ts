@@ -25,4 +25,8 @@ export class SY {
     @Index_()
     @ManyToOne_(() => Token, {nullable: true})
     yieldToken!: Token
+
+    @Index_()
+    @ManyToOne_(() => Token, {nullable: true})
+    baseAsset!: Token
 }

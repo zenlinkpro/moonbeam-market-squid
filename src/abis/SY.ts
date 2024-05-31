@@ -1,5 +1,5 @@
 import * as p from '@subsquid/evm-codec'
-import { event, fun, indexed, ContractBase } from '@subsquid/evm-abi'
+import { event, fun, viewFun, indexed, ContractBase } from '@subsquid/evm-abi'
 import type { EventParams as EParams, FunctionArguments, FunctionReturn } from '@subsquid/evm-abi'
 
 export const events = {
@@ -11,31 +11,31 @@ export const events = {
 }
 
 export const functions = {
-    accruedRewards: fun("0x128fced1", {"user": p.address}, p.array(p.uint256)),
-    allowance: fun("0xdd62ed3e", {"owner": p.address, "spender": p.address}, p.uint256),
+    accruedRewards: viewFun("0x128fced1", {"user": p.address}, p.array(p.uint256)),
+    allowance: viewFun("0xdd62ed3e", {"owner": p.address, "spender": p.address}, p.uint256),
     approve: fun("0x095ea7b3", {"spender": p.address, "amount": p.uint256}, p.bool),
-    assetInfo: fun("0xa40bee50", {}, {"assetType": p.uint8, "assetAddress": p.address, "assetDecimals": p.uint8}),
-    balanceOf: fun("0x70a08231", {"account": p.address}, p.uint256),
+    assetInfo: viewFun("0xa40bee50", {}, {"assetType": p.uint8, "assetAddress": p.address, "assetDecimals": p.uint8}),
+    balanceOf: viewFun("0x70a08231", {"account": p.address}, p.uint256),
     claimRewards: fun("0xef5cfb8c", {"user": p.address}, p.array(p.uint256)),
-    decimals: fun("0x313ce567", {}, p.uint8),
+    decimals: viewFun("0x313ce567", {}, p.uint8),
     deposit: fun("0x20e8c565", {"receiver": p.address, "tokenIn": p.address, "amountTokenToDeposit": p.uint256, "minSharesOut": p.uint256}, p.uint256),
-    exchangeRate: fun("0x3ba0b9a9", {}, p.uint256),
-    getRewardTokens: fun("0xc4f59f9b", {}, p.array(p.address)),
-    getTokensIn: fun("0x213cae63", {}, p.array(p.address)),
-    getTokensOut: fun("0x071bc3c9", {}, p.array(p.address)),
-    isValidTokenIn: fun("0xfa5a4f06", {"token": p.address}, p.bool),
-    isValidTokenOut: fun("0x784367d6", {"token": p.address}, p.bool),
-    name: fun("0x06fdde03", {}, p.string),
-    previewDeposit: fun("0xb8f82b26", {"tokenIn": p.address, "amountTokenToDeposit": p.uint256}, p.uint256),
-    previewRedeem: fun("0xcbe52ae3", {"tokenOut": p.address, "amountSharesToRedeem": p.uint256}, p.uint256),
+    exchangeRate: viewFun("0x3ba0b9a9", {}, p.uint256),
+    getRewardTokens: viewFun("0xc4f59f9b", {}, p.array(p.address)),
+    getTokensIn: viewFun("0x213cae63", {}, p.array(p.address)),
+    getTokensOut: viewFun("0x071bc3c9", {}, p.array(p.address)),
+    isValidTokenIn: viewFun("0xfa5a4f06", {"token": p.address}, p.bool),
+    isValidTokenOut: viewFun("0x784367d6", {"token": p.address}, p.bool),
+    name: viewFun("0x06fdde03", {}, p.string),
+    previewDeposit: viewFun("0xb8f82b26", {"tokenIn": p.address, "amountTokenToDeposit": p.uint256}, p.uint256),
+    previewRedeem: viewFun("0xcbe52ae3", {"tokenOut": p.address, "amountSharesToRedeem": p.uint256}, p.uint256),
     redeem: fun("0x769f8e5d", {"receiver": p.address, "amountSharesToRedeem": p.uint256, "tokenOut": p.address, "minTokenOut": p.uint256, "burnFromInternalBalance": p.bool}, p.uint256),
     rewardIndexesCurrent: fun("0xf8b2f991", {}, p.array(p.uint256)),
-    rewardIndexesStored: fun("0xda88ecb4", {}, p.array(p.uint256)),
-    symbol: fun("0x95d89b41", {}, p.string),
-    totalSupply: fun("0x18160ddd", {}, p.uint256),
+    rewardIndexesStored: viewFun("0xda88ecb4", {}, p.array(p.uint256)),
+    symbol: viewFun("0x95d89b41", {}, p.string),
+    totalSupply: viewFun("0x18160ddd", {}, p.uint256),
     transfer: fun("0xa9059cbb", {"to": p.address, "amount": p.uint256}, p.bool),
     transferFrom: fun("0x23b872dd", {"from": p.address, "to": p.address, "amount": p.uint256}, p.bool),
-    yieldToken: fun("0x76d5de85", {}, p.address),
+    yieldToken: viewFun("0x76d5de85", {}, p.address),
 }
 
 export class Contract extends ContractBase {

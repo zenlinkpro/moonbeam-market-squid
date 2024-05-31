@@ -1,5 +1,5 @@
 import * as p from '@subsquid/evm-codec'
-import { event, fun, indexed, ContractBase } from '@subsquid/evm-abi'
+import { event, fun, viewFun, indexed, ContractBase } from '@subsquid/evm-abi'
 import type { EventParams as EParams, FunctionArguments, FunctionReturn } from '@subsquid/evm-abi'
 
 export const events = {
@@ -8,21 +8,21 @@ export const events = {
 }
 
 export const functions = {
-    SY: fun("0xafd27bf5", {}, p.address),
-    YT: fun("0x781c18db", {}, p.address),
-    allowance: fun("0xdd62ed3e", {"owner": p.address, "spender": p.address}, p.uint256),
+    SY: viewFun("0xafd27bf5", {}, p.address),
+    YT: viewFun("0x781c18db", {}, p.address),
+    allowance: viewFun("0xdd62ed3e", {"owner": p.address, "spender": p.address}, p.uint256),
     approve: fun("0x095ea7b3", {"spender": p.address, "amount": p.uint256}, p.bool),
-    balanceOf: fun("0x70a08231", {"account": p.address}, p.uint256),
+    balanceOf: viewFun("0x70a08231", {"account": p.address}, p.uint256),
     burnByYT: fun("0xb64761f9", {"user": p.address, "amount": p.uint256}, ),
-    decimals: fun("0x313ce567", {}, p.uint8),
-    expiry: fun("0xe184c9be", {}, p.uint256),
-    factory: fun("0xc45a0155", {}, p.address),
+    decimals: viewFun("0x313ce567", {}, p.uint8),
+    expiry: viewFun("0xe184c9be", {}, p.uint256),
+    factory: viewFun("0xc45a0155", {}, p.address),
     initialize: fun("0xc4d66de8", {"_YT": p.address}, ),
-    isExpired: fun("0x2f13b60c", {}, p.bool),
+    isExpired: viewFun("0x2f13b60c", {}, p.bool),
     mintByYT: fun("0x12a31dcc", {"user": p.address, "amount": p.uint256}, ),
-    name: fun("0x06fdde03", {}, p.string),
-    symbol: fun("0x95d89b41", {}, p.string),
-    totalSupply: fun("0x18160ddd", {}, p.uint256),
+    name: viewFun("0x06fdde03", {}, p.string),
+    symbol: viewFun("0x95d89b41", {}, p.string),
+    totalSupply: viewFun("0x18160ddd", {}, p.uint256),
     transfer: fun("0xa9059cbb", {"to": p.address, "amount": p.uint256}, p.bool),
     transferFrom: fun("0x23b872dd", {"from": p.address, "to": p.address, "amount": p.uint256}, p.bool),
 }

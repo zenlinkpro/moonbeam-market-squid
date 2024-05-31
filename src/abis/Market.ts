@@ -1,5 +1,5 @@
 import * as p from '@subsquid/evm-codec'
-import { event, fun, indexed, ContractBase } from '@subsquid/evm-abi'
+import { event, fun, viewFun, indexed, ContractBase } from '@subsquid/evm-abi'
 import type { EventParams as EParams, FunctionArguments, FunctionReturn } from '@subsquid/evm-abi'
 
 export const events = {
@@ -14,37 +14,37 @@ export const events = {
 }
 
 export const functions = {
-    _storage: fun("0xc3fb90d6", {}, {"totalPt": p.int128, "totalSy": p.int128, "lastLnImpliedRate": p.uint96, "observationIndex": p.uint16, "observationCardinality": p.uint16, "observationCardinalityNext": p.uint16}),
-    activeBalance: fun("0x0892cd8b", {"_0": p.address}, p.uint256),
-    allowance: fun("0xdd62ed3e", {"owner": p.address, "spender": p.address}, p.uint256),
+    _storage: viewFun("0xc3fb90d6", {}, {"totalPt": p.int128, "totalSy": p.int128, "lastLnImpliedRate": p.uint96, "observationIndex": p.uint16, "observationCardinality": p.uint16, "observationCardinalityNext": p.uint16}),
+    activeBalance: viewFun("0x0892cd8b", {"_0": p.address}, p.uint256),
+    allowance: viewFun("0xdd62ed3e", {"owner": p.address, "spender": p.address}, p.uint256),
     approve: fun("0x095ea7b3", {"spender": p.address, "amount": p.uint256}, p.bool),
-    balanceOf: fun("0x70a08231", {"account": p.address}, p.uint256),
+    balanceOf: viewFun("0x70a08231", {"account": p.address}, p.uint256),
     burn: fun("0xf6b911bc", {"receiverSy": p.address, "receiverPt": p.address, "netLpToBurn": p.uint256}, {"netSyOut": p.uint256, "netPtOut": p.uint256}),
-    decimals: fun("0x313ce567", {}, p.uint8),
-    expiry: fun("0xe184c9be", {}, p.uint256),
-    factory: fun("0xc45a0155", {}, p.address),
-    getNonOverrideLnFeeRateRoot: fun("0xe4f8b2e9", {}, p.uint80),
-    getRewardTokens: fun("0xc4f59f9b", {}, p.array(p.address)),
+    decimals: viewFun("0x313ce567", {}, p.uint8),
+    expiry: viewFun("0xe184c9be", {}, p.uint256),
+    factory: viewFun("0xc45a0155", {}, p.address),
+    getNonOverrideLnFeeRateRoot: viewFun("0xe4f8b2e9", {}, p.uint80),
+    getRewardTokens: viewFun("0xc4f59f9b", {}, p.array(p.address)),
     increaseObservationsCardinalityNext: fun("0x37d45e3a", {"cardinalityNext": p.uint16}, ),
-    isExpired: fun("0x2f13b60c", {}, p.bool),
-    lastRewardBlock: fun("0xa9f8d181", {}, p.uint256),
+    isExpired: viewFun("0x2f13b60c", {}, p.bool),
+    lastRewardBlock: viewFun("0xa9f8d181", {}, p.uint256),
     mint: fun("0x156e29f6", {"receiver": p.address, "netSyDesired": p.uint256, "netPtDesired": p.uint256}, {"netLpOut": p.uint256, "netSyUsed": p.uint256, "netPtUsed": p.uint256}),
-    name: fun("0x06fdde03", {}, p.string),
-    observations: fun("0x252c09d7", {"_0": p.uint256}, {"blockTimestamp": p.uint32, "lnImpliedRateCumulative": p.uint216, "initialized": p.bool}),
-    observe: fun("0x883bdbfd", {"secondsAgos": p.array(p.uint32)}, p.array(p.uint216)),
-    readState: fun("0x794052f3", {"router": p.address}, p.struct({"totalPt": p.int256, "totalSy": p.int256, "totalLp": p.int256, "treasury": p.address, "scalarRoot": p.int256, "expiry": p.uint256, "lnFeeRateRoot": p.uint256, "reserveFeePercent": p.uint256, "lastLnImpliedRate": p.uint256})),
-    readTokens: fun("0x2c8ce6bc", {}, {"_SY": p.address, "_PT": p.address, "_YT": p.address}),
+    name: viewFun("0x06fdde03", {}, p.string),
+    observations: viewFun("0x252c09d7", {"_0": p.uint256}, {"blockTimestamp": p.uint32, "lnImpliedRateCumulative": p.uint216, "initialized": p.bool}),
+    observe: viewFun("0x883bdbfd", {"secondsAgos": p.array(p.uint32)}, p.array(p.uint216)),
+    readState: viewFun("0x794052f3", {"router": p.address}, p.struct({"totalPt": p.int256, "totalSy": p.int256, "totalLp": p.int256, "treasury": p.address, "scalarRoot": p.int256, "expiry": p.uint256, "lnFeeRateRoot": p.uint256, "reserveFeePercent": p.uint256, "lastLnImpliedRate": p.uint256})),
+    readTokens: viewFun("0x2c8ce6bc", {}, {"_SY": p.address, "_PT": p.address, "_YT": p.address}),
     redeemRewards: fun("0x9262187b", {"user": p.address}, p.array(p.uint256)),
-    rewardState: fun("0xea64a820", {"_0": p.address}, {"index": p.uint128, "lastBalance": p.uint128}),
+    rewardState: viewFun("0xea64a820", {"_0": p.address}, {"index": p.uint128, "lastBalance": p.uint128}),
     skim: fun("0x1dd19cb4", {}, ),
     swapExactPtForSy: fun("0x29910b11", {"receiver": p.address, "exactPtIn": p.uint256, "data": p.bytes}, {"netSyOut": p.uint256, "netSyFee": p.uint256}),
     swapSyForExactPt: fun("0x5b709f17", {"receiver": p.address, "exactPtOut": p.uint256, "data": p.bytes}, {"netSyIn": p.uint256, "netSyFee": p.uint256}),
-    symbol: fun("0x95d89b41", {}, p.string),
-    totalActiveSupply: fun("0x72069264", {}, p.uint256),
-    totalSupply: fun("0x18160ddd", {}, p.uint256),
+    symbol: viewFun("0x95d89b41", {}, p.string),
+    totalActiveSupply: viewFun("0x72069264", {}, p.uint256),
+    totalSupply: viewFun("0x18160ddd", {}, p.uint256),
     transfer: fun("0xa9059cbb", {"to": p.address, "amount": p.uint256}, p.bool),
     transferFrom: fun("0x23b872dd", {"from": p.address, "to": p.address, "amount": p.uint256}, p.bool),
-    userReward: fun("0x5cbadbe4", {"_0": p.address, "_1": p.address}, {"index": p.uint128, "accrued": p.uint128}),
+    userReward: viewFun("0x5cbadbe4", {"_0": p.address, "_1": p.address}, {"index": p.uint128, "accrued": p.uint128}),
 }
 
 export class Contract extends ContractBase {

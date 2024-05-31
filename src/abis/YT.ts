@@ -1,5 +1,5 @@
 import * as p from '@subsquid/evm-codec'
-import { event, fun, indexed, ContractBase } from '@subsquid/evm-abi'
+import { event, fun, viewFun, indexed, ContractBase } from '@subsquid/evm-abi'
 import type { EventParams as EParams, FunctionArguments, FunctionReturn } from '@subsquid/evm-abi'
 
 export const events = {
@@ -15,31 +15,31 @@ export const events = {
 }
 
 export const functions = {
-    PT: fun("0xd94073d4", {}, p.address),
-    SY: fun("0xafd27bf5", {}, p.address),
-    allowance: fun("0xdd62ed3e", {"owner": p.address, "spender": p.address}, p.uint256),
+    PT: viewFun("0xd94073d4", {}, p.address),
+    SY: viewFun("0xafd27bf5", {}, p.address),
+    allowance: viewFun("0xdd62ed3e", {"owner": p.address, "spender": p.address}, p.uint256),
     approve: fun("0x095ea7b3", {"spender": p.address, "amount": p.uint256}, p.bool),
-    balanceOf: fun("0x70a08231", {"account": p.address}, p.uint256),
-    decimals: fun("0x313ce567", {}, p.uint8),
-    doCacheIndexSameBlock: fun("0x516399df", {}, p.bool),
-    expiry: fun("0xe184c9be", {}, p.uint256),
-    factory: fun("0xc45a0155", {}, p.address),
-    getRewardTokens: fun("0xc4f59f9b", {}, p.array(p.address)),
-    isExpired: fun("0x2f13b60c", {}, p.bool),
+    balanceOf: viewFun("0x70a08231", {"account": p.address}, p.uint256),
+    decimals: viewFun("0x313ce567", {}, p.uint8),
+    doCacheIndexSameBlock: viewFun("0x516399df", {}, p.bool),
+    expiry: viewFun("0xe184c9be", {}, p.uint256),
+    factory: viewFun("0xc45a0155", {}, p.address),
+    getRewardTokens: viewFun("0xc4f59f9b", {}, p.array(p.address)),
+    isExpired: viewFun("0x2f13b60c", {}, p.bool),
     mintPY: fun("0xdb74aa15", {"receiverPT": p.address, "receiverYT": p.address}, p.uint256),
-    name: fun("0x06fdde03", {}, p.string),
+    name: viewFun("0x06fdde03", {}, p.string),
     pyIndexCurrent: fun("0x1d52edc4", {}, p.uint256),
-    pyIndexStored: fun("0xd2a3584e", {}, p.uint256),
+    pyIndexStored: viewFun("0xd2a3584e", {}, p.uint256),
     redeemDueInterestAndRewards: fun("0x7d24da4d", {"user": p.address, "redeemInterest": p.bool, "redeemRewards": p.bool}, {"interestOut": p.uint256, "rewardsOut": p.array(p.uint256)}),
     redeemPY: fun("0xbcb7ea5d", {"receiver": p.address}, p.uint256),
     redeemPYMulti: fun("0xb0d88981", {"receivers": p.array(p.address), "amountPYToRedeems": p.array(p.uint256)}, p.array(p.uint256)),
     rewardIndexesCurrent: fun("0xf8b2f991", {}, p.array(p.uint256)),
-    symbol: fun("0x95d89b41", {}, p.string),
-    totalSupply: fun("0x18160ddd", {}, p.uint256),
+    symbol: viewFun("0x95d89b41", {}, p.string),
+    totalSupply: viewFun("0x18160ddd", {}, p.uint256),
     transfer: fun("0xa9059cbb", {"to": p.address, "amount": p.uint256}, p.bool),
     transferFrom: fun("0x23b872dd", {"from": p.address, "to": p.address, "amount": p.uint256}, p.bool),
-    userInterest: fun("0xd68076c3", {"user": p.address}, {"lastInterestIndex": p.uint128, "accruedInterest": p.uint128, "lastPYIndex": p.uint256}),
-    userReward: fun("0x5cbadbe4", {"token": p.address, "user": p.address}, {"index": p.uint128, "accrued": p.uint128}),
+    userInterest: viewFun("0xd68076c3", {"user": p.address}, {"lastInterestIndex": p.uint128, "accruedInterest": p.uint128, "lastPYIndex": p.uint256}),
+    userReward: viewFun("0x5cbadbe4", {"token": p.address, "user": p.address}, {"index": p.uint128, "accrued": p.uint128}),
 }
 
 export class Contract extends ContractBase {

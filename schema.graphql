@@ -14,6 +14,7 @@ type SY @entity {
   priceUSD: Float!
 
   yieldToken: Token!
+  baseAsset: Token!
 }
 
 type PT @entity {
