@@ -60,6 +60,7 @@ type Market @entity {
 
   marketHourData: [MarketHourData!]! @derivedFrom(field: "market")
   marketDayData: [MarketDayData!]! @derivedFrom(field: "market")
+  swaps: [Swap!]! @derivedFrom(field: "market")
 }
 
 type MarketHourData @entity {
@@ -86,4 +87,16 @@ type MarketDayData @entity {
 
   reserveUSD: Float!
   dailyVolumeUSD: Float!
+}
+
+type Swap @entity @index(fields: ["market", "timestamp"]) {
+  # transaction hash + "-" + index in swaps Transaction array
+  id: ID!
+  timestamp: DateTime! # need this to pull recent txns for specific token or pair
+  market: Market! @index
+  caller: String!
+  receiver: String!
+  netPtOut: BigDecimal!
+  netSyOut: BigDecimal!
+  amountUSD: Float!
 }

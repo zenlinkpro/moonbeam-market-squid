@@ -8,9 +8,10 @@ import {
   Transaction as _Transaction,
 } from "@subsquid/evm-processor"
 import { FACTORY_ADDRESS, chainRpc } from "./constants"
-import * as FactoryAbi from './abis/Factory'
+import * as FC from './abis/Factory'
+import * as MC from './abis/Market'
 import { Market } from "./model"
-import { handleNewMarket } from "./mappings"
+import { handleNewMarket, handleSwap } from "./mappings"
 
 const database = new TypeormDatabase()
 const processor = new EvmBatchProcessor()
@@ -20,7 +21,15 @@ const processor = new EvmBatchProcessor()
   .setBlockRange({ from: 6172777 })
   .addLog({
     address: [FACTORY_ADDRESS],
-    topic0: [FactoryAbi.events.CreateNewMarket.topic],
+    topic0: [FC.events.CreateNewMarket.topic],
+  })
+  .addLog({
+    topic0: [
+      MC.events.Swap.topic,
+      MC.events.Mint.topic,
+      MC.events.Burn.topic,
+    ],
+    transaction: true
   })
 
 processor.run(database, async (ctx) => {
@@ -66,6 +75,13 @@ async function handleEvmLog(ctx: Context, log: Log) {
       await handleNewMarket(ctx, log)
       break
     default:
+      if (await isKnownMarketContract(ctx.store, contractAddress)) {
+        switch (log.topics[0]) {
+          case MC.events.Swap.topic:
+            await handleSwap(ctx, log)
+            break
+        }
+      }
       break
   }
 }

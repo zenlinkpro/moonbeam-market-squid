@@ -5,6 +5,7 @@ import {PT} from "./pt.model"
 import {YT} from "./yt.model"
 import {MarketHourData} from "./marketHourData.model"
 import {MarketDayData} from "./marketDayData.model"
+import {Swap} from "./swap.model"
 
 @Entity_()
 export class Market {
@@ -59,4 +60,7 @@ export class Market {
 
     @OneToMany_(() => MarketDayData, e => e.market)
     marketDayData!: MarketDayData[]
+
+    @OneToMany_(() => Swap, e => e.market)
+    swaps!: Swap[]
 }

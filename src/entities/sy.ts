@@ -2,6 +2,7 @@ import { SY } from "../model";
 import { Context, Log } from "../processor";
 import * as SYC from '../abis/SY'
 import { getOrCreateToken } from "./token";
+import { BigDecimal } from "@subsquid/big-decimal";
 
 export async function getOrCreateSy(ctx: Context, log: Log, address: string): Promise<SY> {
   let sy = await ctx.store.get(SY, address)
@@ -23,7 +24,9 @@ export async function getOrCreateSy(ctx: Context, log: Log, address: string): Pr
       getOrCreateToken(ctx, log, assetInfo.assetAddress)
     ])
 
-    yieldToken.priceUSD = baseAsset.priceUSD * parseInt(exchangeRate.toString()) / 1e18
+    yieldToken.priceUSD = parseFloat(
+      BigDecimal(baseAsset.priceUSD).mul(BigDecimal(exchangeRate).div(1e18)).toFixed(6)
+    )
     await ctx.store.save(yieldToken)
 
     sy = new SY({
