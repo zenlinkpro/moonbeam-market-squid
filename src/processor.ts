@@ -11,7 +11,7 @@ import { FACTORY_ADDRESS, chainRpc } from "./constants"
 import * as FC from './abis/Factory'
 import * as MC from './abis/Market'
 import { Market } from "./model"
-import { handleNewMarket, handleSwap } from "./mappings"
+import { handleBurn, handleMint, handleNewMarket, handleSwap } from "./mappings"
 
 const database = new TypeormDatabase()
 const processor = new EvmBatchProcessor()
@@ -79,6 +79,12 @@ async function handleEvmLog(ctx: Context, log: Log) {
         switch (log.topics[0]) {
           case MC.events.Swap.topic:
             await handleSwap(ctx, log)
+            break
+          case MC.events.Mint.topic:
+            await handleMint(ctx, log)
+            break
+          case MC.events.Burn.topic:
+            await handleBurn(ctx, log)
             break
         }
       }

@@ -1,9 +1,9 @@
 import { FACTORY_ADDRESS } from "../constants"
-import { Market, MarketFactory } from "../model"
+import { Market, Factory } from "../model"
 import { Context } from "../processor"
 
 export async function getFactory(ctx: Context) {
-  const factory = await ctx.store.get(MarketFactory, FACTORY_ADDRESS)
+  const factory = await ctx.store.get(Factory, FACTORY_ADDRESS)
 
   return factory
 }

@@ -2,7 +2,7 @@ import { BigDecimal } from "@subsquid/big-decimal";
 import { Context, Log } from "../processor";
 import * as FC from '../abis/Factory'
 import * as MC from '../abis/Market'
-import { Market, MarketFactory } from "../model";
+import { Factory, Market } from "../model";
 import { getOrCreatePt, getOrCreateSy, getOrCreateYt } from "../entities";
 import { zeroAddress } from "viem";
 
@@ -10,9 +10,9 @@ export async function handleNewMarket(ctx: Context, log: Log) {
   const contractAddress = log.address
   const data = FC.events.CreateNewMarket.decode(log)
 
-  let factory = await ctx.store.get(MarketFactory, contractAddress)
+  let factory = await ctx.store.get(Factory, contractAddress)
   if (!factory) {
-    factory = new MarketFactory({
+    factory = new Factory({
       id: contractAddress,
       marketCount: 0,
       totalVolumeUSD: 0,

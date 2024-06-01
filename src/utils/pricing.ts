@@ -53,7 +53,10 @@ export async function trackPriceOfTokensInMarket(ctx: Context, log: Log, market:
   ])
 
   market.priceUSD = parseFloat(
-    BigDecimal(baseAsset.priceUSD).mul(BigDecimal(lpToAssetRate).div(1e18)).toFixed(6)
+    BigDecimal(baseAsset.priceUSD)
+      .mul(BigDecimal(lpToAssetRate).div(1e18))
+      .mul((10 ** market.decimals) / (10 ** baseAsset.decimals))
+      .toFixed(6)
   )
   pt.priceUSD = parseFloat(
     BigDecimal(baseAsset.priceUSD).mul(BigDecimal(ptToAssetRate).div(1e18)).toFixed(6)

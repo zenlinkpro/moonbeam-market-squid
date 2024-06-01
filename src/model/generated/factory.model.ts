@@ -1,8 +1,8 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, IntColumn as IntColumn_, FloatColumn as FloatColumn_} from "@subsquid/typeorm-store"
 
 @Entity_()
-export class MarketFactory {
-    constructor(props?: Partial<MarketFactory>) {
+export class Factory {
+    constructor(props?: Partial<Factory>) {
         Object.assign(this, props)
     }
 

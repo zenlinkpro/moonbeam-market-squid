@@ -33,7 +33,7 @@ type YT @entity {
   priceUSD: Float!
 }
 
-type MarketFactory @entity {
+type Factory @entity {
   id: ID!
   marketCount: Int!
   totalVolumeUSD: Float!
@@ -61,6 +61,8 @@ type Market @entity {
   marketHourData: [MarketHourData!]! @derivedFrom(field: "market")
   marketDayData: [MarketDayData!]! @derivedFrom(field: "market")
   swaps: [Swap!]! @derivedFrom(field: "market")
+  mints: [Mint!]! @derivedFrom(field: "market")
+  burns: [Burn!]! @derivedFrom(field: "market")
 }
 
 type MarketHourData @entity {
@@ -89,14 +91,44 @@ type MarketDayData @entity {
   dailyVolumeUSD: Float!
 }
 
-type Swap @entity @index(fields: ["market", "timestamp"]) {
-  # transaction hash + "-" + index in swaps Transaction array
+type FactoryDayData @entity {
   id: ID!
-  timestamp: DateTime! # need this to pull recent txns for specific token or pair
+  date: DateTime! @index
+  dailyVolumeUSD: Float!
+  totalVolumeUSD: Float!
+  totalLiquidityUSD: Float!
+}
+
+type Swap @entity @index(fields: ["market", "timestamp"]) {
+  id: ID!
+  timestamp: DateTime!
   market: Market! @index
   caller: String!
   receiver: String!
   netPtOut: BigDecimal!
   netSyOut: BigDecimal!
+  amountUSD: Float!
+}
+
+type Mint @entity @index(fields: ["market", "timestamp"]) {
+  id: ID!
+  timestamp: DateTime!
+  market: Market! @index
+  receiver: String!
+  netLpMinted: BigDecimal!
+  netSyUsed: BigDecimal!
+  netPtUsed: BigDecimal!
+  amountUSD: Float!
+}
+
+type Burn @entity @index(fields: ["market", "timestamp"]) {
+  id: ID!
+  timestamp: DateTime!
+  market: Market! @index
+  receiverSy: String!
+  receiverPt: String!
+  netLpBurned: BigDecimal!
+  netSyOut: BigDecimal!
+  netPtOut: BigDecimal!
   amountUSD: Float!
 }
