@@ -4,6 +4,9 @@ import { getDayIdAndTimeStamp, getHourIdAndStartUnix } from "./time";
 import * as MC from '../abis/Market'
 import { zeroAddress } from "viem";
 import { BigDecimal } from "@subsquid/big-decimal";
+import { LessThanOrEqual } from "typeorm";
+import { differenceInDays, getUnixTime } from "date-fns";
+import { calcImpliedAPY, toFloat } from "./math";
 
 export async function updateFactoryDayData(ctx: Context, log: Log, factory: Factory) {
   const [dayId, dayStartTimestamp] = getDayIdAndTimeStamp(log.block.timestamp)
@@ -32,6 +35,43 @@ export async function updateMarketState(ctx: Context, log: Log, market: Market) 
   await ctx.store.save(market)
 }
 
+export async function updateMarketDayAPYs(
+  ctx: Context, 
+  log: Log, 
+  market: Market, 
+  marketDayData: MarketDayData
+) {
+  const dayDatas = await ctx.store.find(MarketDayData, {
+    where: {
+      market,
+      date: LessThanOrEqual(new Date(log.block.timestamp))
+    },
+    take: 7
+  })
+  const length = dayDatas.length
+  if (length <= 1) return
+
+  const firstData = dayDatas[0]
+  const lastData = dayDatas[length - 1]
+
+  const diffInDays = differenceInDays(lastData.date, firstData.date)
+  const daysToMaturity = differenceInDays(
+    new Date(market.expiry.toNumber() * 1000), 
+    new Date(getUnixTime(log.block.timestamp) * 1000)
+  )
+
+  const lastBasicYieldPrice = lastData.baseAssetPrice * (firstData.yieldTokenPrice / firstData.baseAssetPrice)
+  const underlyingAPY = toFloat(
+    ((lastData.yieldTokenPrice - lastBasicYieldPrice) / lastBasicYieldPrice / diffInDays) * 365
+  )
+  const impliedAPY = toFloat(calcImpliedAPY(lastData.ytPrice, lastData.ptPrice, daysToMaturity))
+  marketDayData.underlyingAPY = underlyingAPY
+  marketDayData.impliedAPY = impliedAPY
+  marketDayData.longYieldAPY = 0
+  marketDayData.fixedAPY = impliedAPY
+  await ctx.store.save(marketDayData)
+}
+
 export async function updateMarketDayData(ctx: Context, log: Log, market: Market) {
   const [dayId, dayStartTimestamp] = getDayIdAndTimeStamp(log.block.timestamp)
   const dayMarketId = `${market.id}-${dayId}`
@@ -43,14 +83,23 @@ export async function updateMarketDayData(ctx: Context, log: Log, market: Market
       date: new Date(dayStartTimestamp),
       market,
       dailyVolumeUSD: 0,
+      underlyingAPY: 0,
+      impliedAPY: 0,
+      longYieldAPY: 0,
+      fixedAPY: 0
     })
   }
   marketDayData.totalLp = market.totalLp
   marketDayData.totalPt = market.totalPt
   marketDayData.totalSy = market.totalSy
   marketDayData.reserveUSD = market.reserveUSD
+  marketDayData.baseAssetPrice = market.sy.baseAsset.priceUSD
+  marketDayData.yieldTokenPrice = market.sy.yieldToken.priceUSD
+  marketDayData.ptPrice = market.pt.priceUSD
+  marketDayData.ytPrice = market.yt.priceUSD
 
   await ctx.store.save(marketDayData)
+  await updateMarketDayAPYs(ctx, log, market, marketDayData)
   return marketDayData
 }
 

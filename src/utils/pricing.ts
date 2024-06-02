@@ -5,6 +5,7 @@ import * as SYC from '../abis/SY'
 import { Market } from "../model";
 import { PTLP_ORACLE_ADDRESS, PTLP_ORACLE_DEPLOYED_BLOCK } from "../constants";
 import { BigDecimal } from "@subsquid/big-decimal";
+import { toFloat } from "./math";
 
 const ChainlinkPriceFeeds: Record<string, string> = {
   // xcDOT
@@ -22,9 +23,7 @@ export async function getTokenPriceFromFeed(ctx: Context, log: Log, tokenId: str
     pfc.decimals()
   ])
 
-  return parseFloat(
-    BigDecimal(latestAnswer).div(10 ** decimals).toFixed(6)
-  )
+  return toFloat(BigDecimal(latestAnswer).div(10 ** decimals))
 }
 
 
@@ -36,9 +35,7 @@ export async function trackPriceOfTokensInMarket(ctx: Context, log: Log, market:
   const exchangeRate = await syc.exchangeRate()
 
   baseAsset.priceUSD = await getTokenPriceFromFeed(ctx, log, baseAsset.id)
-  yieldToken.priceUSD = parseFloat(
-    BigDecimal(baseAsset.priceUSD).mul(BigDecimal(exchangeRate).div(1e18)).toFixed(6)
-  )
+  yieldToken.priceUSD = toFloat(BigDecimal(baseAsset.priceUSD).mul(BigDecimal(exchangeRate).div(1e18)))
   sy.priceUSD = yieldToken.priceUSD
   await ctx.store.save(baseAsset)
   await ctx.store.save(yieldToken)
@@ -52,16 +49,13 @@ export async function trackPriceOfTokensInMarket(ctx: Context, log: Log, market:
     oc.getLatestPtToAssetRate(market.id)
   ])
 
-  market.priceUSD = parseFloat(
+  market.priceUSD = toFloat(
     BigDecimal(baseAsset.priceUSD)
       .mul(BigDecimal(lpToAssetRate).div(1e18))
       .mul((10 ** market.decimals) / (10 ** baseAsset.decimals))
-      .toFixed(6)
   )
-  pt.priceUSD = parseFloat(
-    BigDecimal(baseAsset.priceUSD).mul(BigDecimal(ptToAssetRate).div(1e18)).toFixed(6)
-  )
-  yt.priceUSD = parseFloat((baseAsset.priceUSD - pt.priceUSD).toFixed(6))
+  pt.priceUSD = toFloat(BigDecimal(baseAsset.priceUSD).mul(BigDecimal(ptToAssetRate).div(1e18)))
+  yt.priceUSD = toFloat(baseAsset.priceUSD - pt.priceUSD)
   await ctx.store.save(market)
   await ctx.store.save(pt)
   await ctx.store.save(yt)

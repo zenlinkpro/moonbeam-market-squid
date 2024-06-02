@@ -3,6 +3,7 @@ import { Context, Log } from "../processor";
 import * as MC from '../abis/Market'
 import { getFactory, getMarket } from "../entities";
 import {
+  toFloat,
   toTokenDecimals,
   trackPriceOfTokensInMarket,
   updateFactoryDayData,
@@ -30,16 +31,10 @@ export async function handleSwap(ctx: Context, log: Log) {
   const netSyAmountUSD = toTokenDecimals(data.netSyOut, market.sy.decimals).abs().times(market.sy.priceUSD)
   const trackedAmountUSD = netPtAmountUSD.plus(netSyAmountUSD).div(2)
 
-  market.volumeUSD = parseFloat(
-    BigDecimal(market.volumeUSD).plus(trackedAmountUSD).toFixed(6)
-  )
-  factory.totalVolumeUSD = parseFloat(
-    BigDecimal(factory.totalVolumeUSD).plus(trackedAmountUSD).toFixed(6)
-  )
-  factory.totalLiquidityUSD = parseFloat(
-    BigDecimal(factory.totalLiquidityUSD).minus(market.reserveUSD).plus(reserveUSD).toFixed(6)
-  )
-  market.reserveUSD = parseFloat(reserveUSD.toFixed(6))
+  market.volumeUSD = toFloat(BigDecimal(market.volumeUSD).plus(trackedAmountUSD))
+  factory.totalVolumeUSD = toFloat(BigDecimal(factory.totalVolumeUSD).plus(trackedAmountUSD))
+  factory.totalLiquidityUSD = toFloat(BigDecimal(factory.totalLiquidityUSD).minus(market.reserveUSD).plus(reserveUSD))
+  market.reserveUSD = toFloat(reserveUSD)
   await ctx.store.save(market)
   await ctx.store.save(factory)
 
@@ -51,7 +46,7 @@ export async function handleSwap(ctx: Context, log: Log) {
     receiver: data.receiver.toLowerCase(),
     netPtOut: BigDecimal(data.netPtOut),
     netSyOut: BigDecimal(data.netSyOut),
-    amountUSD: parseFloat(trackedAmountUSD.toFixed(6))
+    amountUSD: toFloat(trackedAmountUSD)
   })
   await ctx.store.save(swap)
 
@@ -59,15 +54,9 @@ export async function handleSwap(ctx: Context, log: Log) {
   const marketDayData = await updateMarketDayData(ctx, log, market)
   const marketHourData = await updateMarketHourData(ctx, log, market)
   
-  factoryDayData.dailyVolumeUSD = parseFloat(
-    BigDecimal(factoryDayData.dailyVolumeUSD).plus(trackedAmountUSD).toFixed(6)
-  )
-  marketDayData.dailyVolumeUSD = parseFloat(
-    BigDecimal(marketDayData.dailyVolumeUSD).plus(trackedAmountUSD).toFixed(6)
-  )
-  marketHourData.hourlyVolumeUSD = parseFloat(
-    BigDecimal(marketHourData.hourlyVolumeUSD).plus(trackedAmountUSD).toFixed(6)
-  )
+  factoryDayData.dailyVolumeUSD = toFloat(BigDecimal(factoryDayData.dailyVolumeUSD).plus(trackedAmountUSD))
+  marketDayData.dailyVolumeUSD = toFloat(BigDecimal(marketDayData.dailyVolumeUSD).plus(trackedAmountUSD))
+  marketHourData.hourlyVolumeUSD = toFloat(BigDecimal(marketHourData.hourlyVolumeUSD).plus(trackedAmountUSD))
   await ctx.store.save(factoryDayData)
   await ctx.store.save(marketDayData)
   await ctx.store.save(marketHourData)
@@ -87,10 +76,8 @@ export async function handleMint(ctx: Context, log: Log) {
   const reserveUSD = toTokenDecimals(market.totalLp, market.decimals).mul(market.priceUSD)
   const netLpAmountUSD = toTokenDecimals(data.netLpMinted, market.decimals).abs().times(market.priceUSD)
 
-  factory.totalLiquidityUSD = parseFloat(
-    BigDecimal(factory.totalLiquidityUSD).minus(market.reserveUSD).plus(reserveUSD).toFixed(6)
-  )
-  market.reserveUSD = parseFloat(reserveUSD.toFixed(6))
+  factory.totalLiquidityUSD = toFloat( BigDecimal(factory.totalLiquidityUSD).minus(market.reserveUSD).plus(reserveUSD))
+  market.reserveUSD = toFloat(reserveUSD)
   await ctx.store.save(market)
   await ctx.store.save(factory)
 
@@ -102,7 +89,7 @@ export async function handleMint(ctx: Context, log: Log) {
     netLpMinted: BigDecimal(data.netLpMinted),
     netPtUsed: BigDecimal(data.netPtUsed),
     netSyUsed: BigDecimal(data.netSyUsed),
-    amountUSD: parseFloat(netLpAmountUSD.toFixed(6))
+    amountUSD: toFloat(netLpAmountUSD)
   })
   await ctx.store.save(mint)
 
@@ -125,10 +112,8 @@ export async function handleBurn(ctx: Context, log: Log) {
   const reserveUSD = toTokenDecimals(market.totalLp, market.decimals).mul(market.priceUSD)
   const netLpAmountUSD = toTokenDecimals(data.netLpBurned, market.decimals).abs().times(market.priceUSD)
   
-  factory.totalLiquidityUSD = parseFloat(
-    BigDecimal(factory.totalLiquidityUSD).minus(market.reserveUSD).plus(reserveUSD).toFixed(6)
-  )
-  market.reserveUSD = parseFloat(reserveUSD.toFixed(6))
+  factory.totalLiquidityUSD = toFloat(BigDecimal(factory.totalLiquidityUSD).minus(market.reserveUSD).plus(reserveUSD))
+  market.reserveUSD = toFloat(reserveUSD)
   await ctx.store.save(market)
   await ctx.store.save(factory)
 
@@ -141,7 +126,7 @@ export async function handleBurn(ctx: Context, log: Log) {
     netLpBurned: BigDecimal(data.netLpBurned),
     netPtOut: BigDecimal(data.netPtOut),
     netSyOut: BigDecimal(data.netSyOut),
-    amountUSD: parseFloat(netLpAmountUSD.toFixed(6))
+    amountUSD: toFloat(netLpAmountUSD)
   })
   await ctx.store.save(burn)
 

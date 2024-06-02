@@ -51,6 +51,9 @@ export class Market {
     @BigDecimalColumn_({nullable: false})
     totalLp!: BigDecimal
 
+    @BigDecimalColumn_({nullable: false})
+    expiry!: BigDecimal
+
     @FloatColumn_({nullable: false})
     reserveUSD!: number
 

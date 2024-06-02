@@ -55,6 +55,8 @@ type Market @entity {
   totalPt: BigDecimal!
   totalLp: BigDecimal!
 
+  expiry: BigDecimal!
+
   reserveUSD: Float!
   volumeUSD: Float!
 
@@ -78,7 +80,7 @@ type MarketHourData @entity {
   hourlyVolumeUSD: Float!
 }
 
-type MarketDayData @entity {
+type MarketDayData @entity @index(fields: ["market", "date"]) {
   id: ID!
   date: DateTime! @index
   market: Market!
@@ -89,6 +91,16 @@ type MarketDayData @entity {
 
   reserveUSD: Float!
   dailyVolumeUSD: Float!
+
+  baseAssetPrice: Float!
+  yieldTokenPrice: Float!
+  ptPrice: Float!
+  ytPrice: Float!
+
+  underlyingAPY: Float!
+  impliedAPY: Float!
+  longYieldAPY: Float!
+  fixedAPY: Float
 }
 
 type FactoryDayData @entity {

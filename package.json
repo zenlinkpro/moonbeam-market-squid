@@ -24,7 +24,8 @@
     "dotenv": "^16.0.3",
     "ethers": "^6.3.0",
     "pg": "^8.8.0",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "date-fns": "^3.6.0"
   },
   "devDependencies": {
     "@subsquid/evm-typegen": "^4.1.2",

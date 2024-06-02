@@ -51,7 +51,8 @@ export async function handleNewMarket(ctx: Context, log: Log) {
     totalPt: BigDecimal(state.totalPt),
     totalSy: BigDecimal(state.totalSy),
     reserveUSD: 0,
-    volumeUSD: 0
+    volumeUSD: 0,
+    expiry: BigDecimal(state.expiry)
   })
 
   await ctx.store.save(market)
