@@ -60,6 +60,9 @@ export class Market {
     @FloatColumn_({nullable: false})
     volumeUSD!: number
 
+    @FloatColumn_({nullable: false})
+    feeUSD!: number
+
     @OneToMany_(() => MarketHourData, e => e.market)
     marketHourData!: MarketHourData[]
 

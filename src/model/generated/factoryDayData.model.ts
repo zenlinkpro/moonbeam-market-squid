@@ -17,7 +17,13 @@ export class FactoryDayData {
     dailyVolumeUSD!: number
 
     @FloatColumn_({nullable: false})
+    dailyFeeUSD!: number
+
+    @FloatColumn_({nullable: false})
     totalVolumeUSD!: number
+
+    @FloatColumn_({nullable: false})
+    totalFeeUSD!: number
 
     @FloatColumn_({nullable: false})
     totalLiquidityUSD!: number

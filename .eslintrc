@@ -11,7 +11,6 @@
     "warnOnUnsupportedTypeScriptVersion": false // TODO: remove after updating to eslint 8
   },
   "rules": {
-    
     "import/extensions": "off",
     "no-plusplus": "off",
     // https://basarat.gitbooks.io/typescript/docs/tips/defaultIsBad.html

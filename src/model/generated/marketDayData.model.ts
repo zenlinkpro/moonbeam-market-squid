@@ -35,6 +35,9 @@ export class MarketDayData {
     dailyVolumeUSD!: number
 
     @FloatColumn_({nullable: false})
+    dailyFeeUSD!: number
+
+    @FloatColumn_({nullable: false})
     baseAssetPrice!: number
 
     @FloatColumn_({nullable: false})
@@ -55,6 +58,6 @@ export class MarketDayData {
     @FloatColumn_({nullable: false})
     longYieldAPY!: number
 
-    @FloatColumn_({nullable: true})
-    fixedAPY!: number | undefined | null
+    @FloatColumn_({nullable: false})
+    fixedAPY!: number
 }

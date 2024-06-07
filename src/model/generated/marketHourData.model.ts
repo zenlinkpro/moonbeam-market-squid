@@ -33,4 +33,7 @@ export class MarketHourData {
 
     @FloatColumn_({nullable: false})
     hourlyVolumeUSD!: number
+
+    @FloatColumn_({nullable: false})
+    hourlyFeeUSD!: number
 }

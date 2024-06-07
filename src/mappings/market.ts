@@ -29,10 +29,13 @@ export async function handleSwap(ctx: Context, log: Log) {
 
   const netPtAmountUSD = toTokenDecimals(data.netPtOut, market.pt.decimals).abs().times(market.pt.priceUSD)
   const netSyAmountUSD = toTokenDecimals(data.netSyOut, market.sy.decimals).abs().times(market.sy.priceUSD)
+  const netFeeAmountUSD = toTokenDecimals(data.netSyFee, market.sy.decimals).abs().times(market.sy.priceUSD)
   const trackedAmountUSD = netPtAmountUSD.plus(netSyAmountUSD).div(2)
 
   market.volumeUSD = toFloat(BigDecimal(market.volumeUSD).plus(trackedAmountUSD))
+  market.feeUSD = toFloat(BigDecimal(market.feeUSD).plus(netFeeAmountUSD))
   factory.totalVolumeUSD = toFloat(BigDecimal(factory.totalVolumeUSD).plus(trackedAmountUSD))
+  factory.totalFeeUSD = toFloat(BigDecimal(factory.totalFeeUSD).plus(netFeeAmountUSD))
   factory.totalLiquidityUSD = toFloat(BigDecimal(factory.totalLiquidityUSD).minus(market.reserveUSD).plus(reserveUSD))
   market.reserveUSD = toFloat(reserveUSD)
   await ctx.store.save(market)
@@ -46,6 +49,8 @@ export async function handleSwap(ctx: Context, log: Log) {
     receiver: data.receiver.toLowerCase(),
     netPtOut: BigDecimal(data.netPtOut),
     netSyOut: BigDecimal(data.netSyOut),
+    netSyFee: BigDecimal(data.netSyFee),
+    netSyToReserve: BigDecimal(data.netSyToReserve),
     amountUSD: toFloat(trackedAmountUSD)
   })
   await ctx.store.save(swap)
@@ -55,8 +60,12 @@ export async function handleSwap(ctx: Context, log: Log) {
   const marketHourData = await updateMarketHourData(ctx, log, market)
   
   factoryDayData.dailyVolumeUSD = toFloat(BigDecimal(factoryDayData.dailyVolumeUSD).plus(trackedAmountUSD))
+  factoryDayData.dailyFeeUSD = toFloat(BigDecimal(factoryDayData.dailyFeeUSD).plus(netFeeAmountUSD))
   marketDayData.dailyVolumeUSD = toFloat(BigDecimal(marketDayData.dailyVolumeUSD).plus(trackedAmountUSD))
+  marketDayData.dailyFeeUSD = toFloat(BigDecimal(marketDayData.dailyFeeUSD).plus(netFeeAmountUSD))
   marketHourData.hourlyVolumeUSD = toFloat(BigDecimal(marketHourData.hourlyVolumeUSD).plus(trackedAmountUSD))
+  marketHourData.hourlyFeeUSD = toFloat(BigDecimal(marketHourData.hourlyFeeUSD).plus(netFeeAmountUSD))
+  
   await ctx.store.save(factoryDayData)
   await ctx.store.save(marketDayData)
   await ctx.store.save(marketHourData)

@@ -30,6 +30,12 @@ export class Swap {
     @BigDecimalColumn_({nullable: false})
     netSyOut!: BigDecimal
 
+    @BigDecimalColumn_({nullable: false})
+    netSyFee!: BigDecimal
+
+    @BigDecimalColumn_({nullable: false})
+    netSyToReserve!: BigDecimal
+
     @FloatColumn_({nullable: false})
     amountUSD!: number
 }

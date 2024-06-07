@@ -37,6 +37,7 @@ type Factory @entity {
   id: ID!
   marketCount: Int!
   totalVolumeUSD: Float!
+  totalFeeUSD: Float!
   totalLiquidityUSD: Float!
 }
 
@@ -59,6 +60,7 @@ type Market @entity {
 
   reserveUSD: Float!
   volumeUSD: Float!
+  feeUSD: Float!
 
   marketHourData: [MarketHourData!]! @derivedFrom(field: "market")
   marketDayData: [MarketDayData!]! @derivedFrom(field: "market")
@@ -78,6 +80,7 @@ type MarketHourData @entity {
 
   reserveUSD: Float!
   hourlyVolumeUSD: Float!
+  hourlyFeeUSD: Float!
 }
 
 type MarketDayData @entity @index(fields: ["market", "date"]) {
@@ -91,6 +94,7 @@ type MarketDayData @entity @index(fields: ["market", "date"]) {
 
   reserveUSD: Float!
   dailyVolumeUSD: Float!
+  dailyFeeUSD: Float!
 
   baseAssetPrice: Float!
   yieldTokenPrice: Float!
@@ -100,14 +104,16 @@ type MarketDayData @entity @index(fields: ["market", "date"]) {
   underlyingAPY: Float!
   impliedAPY: Float!
   longYieldAPY: Float!
-  fixedAPY: Float
+  fixedAPY: Float!
 }
 
 type FactoryDayData @entity {
   id: ID!
   date: DateTime! @index
   dailyVolumeUSD: Float!
+  dailyFeeUSD: Float!
   totalVolumeUSD: Float!
+  totalFeeUSD: Float!
   totalLiquidityUSD: Float!
 }
 
@@ -119,6 +125,8 @@ type Swap @entity @index(fields: ["market", "timestamp"]) {
   receiver: String!
   netPtOut: BigDecimal!
   netSyOut: BigDecimal!
+  netSyFee: BigDecimal!
+  netSyToReserve: BigDecimal!
   amountUSD: Float!
 }
 

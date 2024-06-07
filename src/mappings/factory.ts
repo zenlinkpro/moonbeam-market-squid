@@ -16,6 +16,7 @@ export async function handleNewMarket(ctx: Context, log: Log) {
       id: contractAddress,
       marketCount: 0,
       totalVolumeUSD: 0,
+      totalFeeUSD: 0,
       totalLiquidityUSD: 0
     })
   }
@@ -52,6 +53,7 @@ export async function handleNewMarket(ctx: Context, log: Log) {
     totalSy: BigDecimal(state.totalSy),
     reserveUSD: 0,
     volumeUSD: 0,
+    feeUSD: 0,
     expiry: BigDecimal(state.expiry)
   })
 

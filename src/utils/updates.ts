@@ -17,10 +17,12 @@ export async function updateFactoryDayData(ctx: Context, log: Log, factory: Fact
       id: dayId.toString(),
       date: new Date(dayStartTimestamp),
       dailyVolumeUSD: 0,
+      dailyFeeUSD: 0
     })
   }
   factoryDayData.totalLiquidityUSD = factory.totalLiquidityUSD
   factoryDayData.totalVolumeUSD = factory.totalVolumeUSD
+  factoryDayData.totalFeeUSD = factory.totalFeeUSD
 
   await ctx.store.save(factoryDayData)
   return factoryDayData
@@ -83,6 +85,7 @@ export async function updateMarketDayData(ctx: Context, log: Log, market: Market
       date: new Date(dayStartTimestamp),
       market,
       dailyVolumeUSD: 0,
+      dailyFeeUSD: 0,
       underlyingAPY: 0,
       impliedAPY: 0,
       longYieldAPY: 0,
@@ -113,7 +116,8 @@ export async function updateMarketHourData(ctx: Context, log: Log, market: Marke
       id: hourMarketId,
       hourStartUnix: BigInt(hourStartUnix),
       market,
-      hourlyVolumeUSD: 0
+      hourlyVolumeUSD: 0,
+      hourlyFeeUSD: 0
     })
   }
   marketHourData.totalLp = market.totalLp

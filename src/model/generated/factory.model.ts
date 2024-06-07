@@ -16,5 +16,8 @@ export class Factory {
     totalVolumeUSD!: number
 
     @FloatColumn_({nullable: false})
+    totalFeeUSD!: number
+
+    @FloatColumn_({nullable: false})
     totalLiquidityUSD!: number
 }
