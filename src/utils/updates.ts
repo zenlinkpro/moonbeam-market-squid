@@ -65,7 +65,6 @@ export async function updateMarketDayAPYs(
 
   const lastDayRate = lastData.yieldTokenPrice / lastData.baseAssetPrice
   const firstDayRate = firstData.yieldTokenPrice / firstData.baseAssetPrice
-  console.log(lastData.date, firstData.date, lastDayRate, firstDayRate, diffInDays)
   const underlyingAPY = toFloat((lastDayRate / firstDayRate - 1) * (365 / diffInDays))
   const impliedAPY = toFloat(calcImpliedAPY(lastData.ytPrice, lastData.ptPrice, daysToMaturity))
   marketDayData.underlyingAPY = underlyingAPY
