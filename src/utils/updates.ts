@@ -38,34 +38,35 @@ export async function updateMarketState(ctx: Context, log: Log, market: Market) 
 }
 
 export async function updateMarketDayAPYs(
-  ctx: Context, 
-  log: Log, 
-  market: Market, 
+  ctx: Context,
+  log: Log,
+  market: Market,
   marketDayData: MarketDayData
 ) {
   const dayDatas = await ctx.store.find(MarketDayData, {
     where: {
       market,
-      date: LessThanOrEqual(new Date(log.block.timestamp))
+      date: LessThanOrEqual(new Date(getUnixTime(log.block.timestamp) * 1000)),
     },
-    take: 7
+    take: 7,
+    order: { date: 'DESC' },
   })
   const length = dayDatas.length
   if (length <= 1) return
 
-  const firstData = dayDatas[0]
-  const lastData = dayDatas[length - 1]
+  const firstData = dayDatas[length - 1]
+  const lastData = dayDatas[0]
 
   const diffInDays = differenceInDays(lastData.date, firstData.date)
   const daysToMaturity = differenceInDays(
-    new Date(market.expiry.toNumber() * 1000), 
+    new Date(market.expiry.toNumber() * 1000),
     new Date(getUnixTime(log.block.timestamp) * 1000)
   )
 
-  const lastBasicYieldPrice = lastData.baseAssetPrice * (firstData.yieldTokenPrice / firstData.baseAssetPrice)
-  const underlyingAPY = toFloat(
-    ((lastData.yieldTokenPrice - lastBasicYieldPrice) / lastBasicYieldPrice / diffInDays) * 365
-  )
+  const lastDayRate = lastData.yieldTokenPrice / lastData.baseAssetPrice
+  const firstDayRate = firstData.yieldTokenPrice / firstData.baseAssetPrice
+  console.log(lastData.date, firstData.date, lastDayRate, firstDayRate, diffInDays)
+  const underlyingAPY = toFloat((lastDayRate / firstDayRate - 1) * (365 / diffInDays))
   const impliedAPY = toFloat(calcImpliedAPY(lastData.ytPrice, lastData.ptPrice, daysToMaturity))
   marketDayData.underlyingAPY = underlyingAPY
   marketDayData.impliedAPY = impliedAPY
