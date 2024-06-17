@@ -1,5 +1,5 @@
-module.exports = class Data1717751884197 {
-    name = 'Data1717751884197'
+module.exports = class Data1718524479324 {
+    name = 'Data1718524479324'
 
     async up(db) {
         await db.query(`CREATE TABLE "token" ("id" character varying NOT NULL, "symbol" text NOT NULL, "name" text NOT NULL, "decimals" integer NOT NULL, "price_usd" numeric NOT NULL, CONSTRAINT "PK_82fae97f905930df5d62a702fc9" PRIMARY KEY ("id"))`)
@@ -12,7 +12,7 @@ module.exports = class Data1717751884197 {
         await db.query(`CREATE TABLE "market_hour_data" ("id" character varying NOT NULL, "hour_start_unix" numeric NOT NULL, "total_sy" numeric NOT NULL, "total_pt" numeric NOT NULL, "total_lp" numeric NOT NULL, "reserve_usd" numeric NOT NULL, "hourly_volume_usd" numeric NOT NULL, "hourly_fee_usd" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_fe8e07643d89f76771f75022e30" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_25ac09e46ee99f2f7d985dde6e" ON "market_hour_data" ("hour_start_unix") `)
         await db.query(`CREATE INDEX "IDX_9659555c3d9ef72633bcd73980" ON "market_hour_data" ("market_id") `)
-        await db.query(`CREATE TABLE "market_day_data" ("id" character varying NOT NULL, "date" TIMESTAMP WITH TIME ZONE NOT NULL, "total_sy" numeric NOT NULL, "total_pt" numeric NOT NULL, "total_lp" numeric NOT NULL, "reserve_usd" numeric NOT NULL, "daily_volume_usd" numeric NOT NULL, "daily_fee_usd" numeric NOT NULL, "base_asset_price" numeric NOT NULL, "yield_token_price" numeric NOT NULL, "pt_price" numeric NOT NULL, "yt_price" numeric NOT NULL, "underlying_apy" numeric NOT NULL, "implied_apy" numeric NOT NULL, "long_yield_apy" numeric NOT NULL, "fixed_apy" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_73be732a5d3ca8c02fceccb893a" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "market_day_data" ("id" character varying NOT NULL, "date" TIMESTAMP WITH TIME ZONE NOT NULL, "total_sy" numeric NOT NULL, "total_pt" numeric NOT NULL, "total_lp" numeric NOT NULL, "reserve_usd" numeric NOT NULL, "daily_volume_usd" numeric NOT NULL, "daily_fee_usd" numeric NOT NULL, "base_asset_price" numeric NOT NULL, "yield_token_price" numeric NOT NULL, "pt_price" numeric NOT NULL, "yt_price" numeric NOT NULL, "underlying_apy" numeric NOT NULL, "implied_apy" numeric NOT NULL, "long_yield_roi" numeric NOT NULL, "fixed_roi" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_73be732a5d3ca8c02fceccb893a" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_f76883fa033bb2366e3866b36a" ON "market_day_data" ("date") `)
         await db.query(`CREATE INDEX "IDX_565c4ef4db1f1882430cc7a360" ON "market_day_data" ("market_id", "date") `)
         await db.query(`CREATE TABLE "swap" ("id" character varying NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "caller" text NOT NULL, "receiver" text NOT NULL, "net_pt_out" numeric NOT NULL, "net_sy_out" numeric NOT NULL, "net_sy_fee" numeric NOT NULL, "net_sy_to_reserve" numeric NOT NULL, "amount_usd" numeric NOT NULL, "market_id" character varying, CONSTRAINT "PK_4a10d0f359339acef77e7f986d9" PRIMARY KEY ("id"))`)

@@ -103,8 +103,8 @@ type MarketDayData @entity @index(fields: ["market", "date"]) {
 
   underlyingAPY: Float!
   impliedAPY: Float!
-  longYieldAPY: Float!
-  fixedAPY: Float!
+  longYieldROI: Float!
+  fixedROI: Float!
 }
 
 type FactoryDayData @entity {

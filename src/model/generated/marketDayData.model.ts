@@ -56,8 +56,8 @@ export class MarketDayData {
     impliedAPY!: number
 
     @FloatColumn_({nullable: false})
-    longYieldAPY!: number
+    longYieldROI!: number
 
     @FloatColumn_({nullable: false})
-    fixedAPY!: number
+    fixedROI!: number
 }

@@ -69,8 +69,12 @@ export async function updateMarketDayAPYs(
   const impliedAPY = toFloat(calcImpliedAPY(lastData.ytPrice, lastData.ptPrice, daysToMaturity))
   marketDayData.underlyingAPY = underlyingAPY
   marketDayData.impliedAPY = impliedAPY
-  marketDayData.longYieldAPY = 0
-  marketDayData.fixedAPY = impliedAPY
+  marketDayData.longYieldROI = market.sy.baseAsset.priceUSD && market.yt.priceUSD
+    ? underlyingAPY * (daysToMaturity / 365) * (market.sy.baseAsset.priceUSD / market.yt.priceUSD) - 1
+    : 0
+  marketDayData.fixedROI = market.pt.priceUSD
+    ? (market.sy.baseAsset.priceUSD - market.pt.priceUSD) / market.pt.priceUSD
+    : 0
   await ctx.store.save(marketDayData)
 }
 
@@ -88,8 +92,8 @@ export async function updateMarketDayData(ctx: Context, log: Log, market: Market
       dailyFeeUSD: 0,
       underlyingAPY: 0,
       impliedAPY: 0,
-      longYieldAPY: 0,
-      fixedAPY: 0
+      longYieldROI: 0,
+      fixedROI: 0
     })
   }
   marketDayData.totalLp = market.totalLp
