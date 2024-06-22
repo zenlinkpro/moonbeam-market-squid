@@ -1,4 +1,8 @@
 import { Store, TypeormDatabase } from "@subsquid/typeorm-store"
+import * as FC from './abis/Factory'
+import * as MC from './abis/Market'
+import * as TC from './abis/Treasury'
+import * as VC from './abis/Vote'
 import {
   BlockHeader,
   DataHandlerContext,
@@ -7,12 +11,17 @@ import {
   Log as _Log,
   Transaction as _Transaction,
 } from "@subsquid/evm-processor"
-import { FACTORY_ADDRESS, TREASURY_ADDRESS, chainRpc } from "./constants"
-import * as FC from './abis/Factory'
-import * as MC from './abis/Market'
-import * as TC from './abis/Treasury'
+import { FACTORY_ADDRESS, TREASURY_ADDRESS, VOTE_ADDRESS, chainRpc } from "./constants"
 import { Market } from "./model"
-import { handleBurn, handleMint, handleNewMarket, handleSwap, handleTreasuryDistribute } from "./mappings"
+import {
+  handleBurn,
+  handleMint,
+  handleNewMarket,
+  handleSwap,
+  handleTreasuryDistribute,
+  handleVote
+} from "./mappings"
+
 
 const database = new TypeormDatabase()
 const processor = new EvmBatchProcessor()
@@ -36,7 +45,11 @@ const processor = new EvmBatchProcessor()
     address: [TREASURY_ADDRESS],
     topic0: [TC.events.RedeemSyToToken.topic]
   })
-  
+  .addLog({
+    address: [VOTE_ADDRESS],
+    topic0: [VC.events.Vote.topic]
+  })
+
 
 processor.run(database, async (ctx) => {
   for (const block of ctx.blocks) {
@@ -82,6 +95,9 @@ async function handleEvmLog(ctx: Context, log: Log) {
       break
     case TREASURY_ADDRESS:
       await handleTreasuryDistribute(ctx, log)
+      break
+    case VOTE_ADDRESS:
+      await handleVote(ctx, log)
       break
     default:
       if (await isKnownMarketContract(ctx.store, contractAddress)) {

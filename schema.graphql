@@ -160,3 +160,13 @@ type TreasuryDistribute @entity {
   token: Token!
   accumulatedAmount: BigDecimal!
 }
+
+type VotingEvent @entity {
+  id: ID!
+  user: String!
+  bias: BigInt!
+  slope: BigInt!
+  timestamp: BigInt!
+  pool: String!
+  syncingIndex: Int!
+}
