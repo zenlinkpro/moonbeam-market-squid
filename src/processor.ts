@@ -28,7 +28,7 @@ const processor = new EvmBatchProcessor()
   .setGateway('https://v2.archive.subsquid.io/network/moonbeam-mainnet')
   .setRpcEndpoint(chainRpc)
   .setFinalityConfirmation(5)
-  .setBlockRange({ from: 6172777 })
+  .setBlockRange({ from: 6455755 })
   .addLog({
     address: [FACTORY_ADDRESS],
     topic0: [FC.events.CreateNewMarket.topic],

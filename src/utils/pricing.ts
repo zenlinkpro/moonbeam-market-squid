@@ -3,14 +3,9 @@ import * as PFC from '../abis/PriceFeed'
 import * as OC from '../abis/PtLpOracle'
 import * as SYC from '../abis/SY'
 import { Market } from "../model";
-import { PTLP_ORACLE_ADDRESS, PTLP_ORACLE_DEPLOYED_BLOCK } from "../constants";
+import { ChainlinkPriceFeeds, PTLP_ORACLE_ADDRESS, PTLP_ORACLE_DEPLOYED_BLOCK } from "../constants";
 import { BigDecimal } from "@subsquid/big-decimal";
 import { toFloat } from "./math";
-
-const ChainlinkPriceFeeds: Record<string, string> = {
-  // xcDOT
-  '0xffffffff1fcacbd218edc0eba20fc2308c778080': '0x1466b4bD0C4B6B8e1164991909961e0EE6a66d8c'
-}
 
 export async function getTokenPriceFromFeed(ctx: Context, log: Log, tokenId: string) {
   const feedAddress = ChainlinkPriceFeeds[tokenId]

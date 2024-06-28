@@ -1,7 +1,14 @@
 export const chainRpc = 'https://moonbeam.unitedbloc.com'
 
-export const FACTORY_ADDRESS = '0xCE5305350de5Fe37b7746fD1f0560C9BBe6E8231'.toLowerCase()
-export const TREASURY_ADDRESS = '0xCDa2F230556f693470ef3a2f0B48B44Ad958781f'.toLowerCase()
-export const VOTE_ADDRESS = '0x5Bd4bce7a7E69428142FE8da35bEc54F82e749fd'.toLowerCase()
-export const PTLP_ORACLE_ADDRESS = '0x99f744C417a0c56bDF68a536c009524cfA1117c8'.toLowerCase()
-export const PTLP_ORACLE_DEPLOYED_BLOCK = 6275845
+export const FACTORY_ADDRESS = '0xAA37890233827716736eA28F59C099F3d89b9F84'.toLowerCase()
+export const TREASURY_ADDRESS = '0x9a607a7337211D1C8bC157be6CC5E8b0ae4a9AE6'.toLowerCase()
+export const VOTE_ADDRESS = '0x3fbAf4FBf6A2198c1E347e9e6f5bd842c3d70488'.toLowerCase()
+export const PTLP_ORACLE_ADDRESS = '0x4c0c2A35b020e1c4c19F5eEf08465356E5590EF9'.toLowerCase()
+export const PTLP_ORACLE_DEPLOYED_BLOCK = 6456014
+
+export const ChainlinkPriceFeeds: Record<string, string> = {
+  // xcDOT
+  '0xffffffff1fcacbd218edc0eba20fc2308c778080': '0x1466b4bD0C4B6B8e1164991909961e0EE6a66d8c',
+  // wGLMR
+  '0xacc15dc74880c9944775448304b263d191c6077f': '0x4497B606be93e773bbA5eaCFCb2ac5E2214220Eb'
+}
