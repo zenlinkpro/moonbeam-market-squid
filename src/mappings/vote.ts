@@ -2,10 +2,12 @@ import { Context, Log } from "../processor";
 import * as VC from '../abis/Vote'
 import { VotingEvent } from "../model";
 
-let syncingIndex = 0
-
 export async function handleVote(ctx: Context, log: Log) {
   const data = VC.events.Vote.decode(log)
+
+  const lastVotingEvent = await ctx.store.find(VotingEvent, { order: { syncingIndex: 'DESC' }, take: 1 })
+
+  const syncingIndex = lastVotingEvent[0] ? lastVotingEvent[0].syncingIndex + 1 : 0
 
   const id = `${data.user}-${syncingIndex}`
   const votingEvent = new VotingEvent({
@@ -18,5 +20,4 @@ export async function handleVote(ctx: Context, log: Log) {
     syncingIndex
   })
   await ctx.store.save(votingEvent)
-  syncingIndex++
 }
