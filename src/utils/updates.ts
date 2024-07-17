@@ -48,14 +48,14 @@ export async function updateMarketDayAPYs(
       market,
       date: LessThanOrEqual(new Date(getUnixTime(log.block.timestamp) * 1000)),
     },
-    take: 7,
+    take: 8,
     order: { date: 'DESC' },
   })
   const length = dayDatas.length
-  if (length <= 1) return
+  if (length <= 2) return
 
   const firstData = dayDatas[length - 1]
-  const lastData = dayDatas[0]
+  const lastData = dayDatas[1]
 
   const diffInDays = differenceInDays(lastData.date, firstData.date)
   const daysToMaturity = differenceInDays(

@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: moonbeam-market
-version: 1
+version: 2
 description: |-
   Moonbeam Market Squid
 build:
